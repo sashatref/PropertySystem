@@ -56,20 +56,20 @@ namespace PropertySystemNS
 #endif
 
 
-#ifndef buildPropertyP
-    #define buildPropertyP(_type, member)                                           \
-      public:                                                                       \
-      inline void set_##member(const _type &_arg_##member)                          \
-      {                                                                             \
-        m_##member = _arg_##member;                                                 \
-      }                                                                             \
-      inline const _type &get_##member() const                                      \
-      {                                                                             \
-        return m_##member;                                                          \
-      }                                                                             \
-        _type m_##member;                                                           \
-      public:
-#endif
+//#ifndef buildPropertyP
+//    #define buildPropertyP(_type, member)                                           \
+//      public:                                                                       \
+//      inline void set_##member(const _type &_arg_##member)                          \
+//      {                                                                             \
+//        m_##member = _arg_##member;                                                 \
+//      }                                                                             \
+//      inline const _type &get_##member() const                                      \
+//      {                                                                             \
+//        return m_##member;                                                          \
+//      }                                                                             \
+//        _type m_##member;                                                           \
+//      public:
+//#endif
 
 #ifndef PS_DISABLE_COPY
     #define PS_DISABLE_COPY(ClassName)                                              \

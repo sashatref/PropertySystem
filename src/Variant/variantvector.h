@@ -16,6 +16,7 @@ class PROPERTY_SYSTEM_EXPORT VariantVector : public std::vector<Variant>
 {
 public:
     VariantVector();
+    VariantVector(const std::initializer_list<Variant> &_vec);
     VariantVector(const std::vector<Variant> &_vec);
     VariantVector &operator =(const std::vector<Variant> &_vec);
 

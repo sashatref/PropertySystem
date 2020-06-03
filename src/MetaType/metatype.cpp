@@ -1,6 +1,6 @@
-#include "project_pch.h"
+#include "../project_pch.h"
 #include "metatype.h"
-#include "Variant/variantmacro.h"
+#include "../Variant/variantmacro.h"
 
 #include "metatypelessbase.h"
 
@@ -83,36 +83,29 @@ static struct MetaFactoryData
 
     ~MetaFactoryData()
     {
-        std::for_each(m_metaTypeList.begin(), m_metaTypeList.end(),
-                      [](MetaType *_item)
-        {
-            delete _item;
-        });
 
-        std::for_each(m_indexList.begin(), m_indexList.end(),
-                      [](const std::type_index* _item)
-        {
-            delete _item;
-        });
     }
 
-    std::vector<MetaType*> m_metaTypeList;
-    std::vector<const std::type_index*> m_indexList;
+    std::list<std::shared_ptr<MetaType>> m_metaTypeList;
+    std::list<std::shared_ptr<const std::type_index>> m_indexList;
 
     std::map<std::type_index, const char*> m_typeToName;
-    std::map<std::type_index, MetaType*> m_typeToMetaType;
+    std::map<std::type_index, std::shared_ptr<MetaType>> m_typeToMetaType;
 
-    std::map<const char *, const std::type_index *, cmp_str> m_nameToTypeId;
-    std::map<const char *, MetaType*, cmp_str> m_nameToMetaType;
+    std::map<const char *, const std::type_index*, cmp_str> m_nameToTypeId;
+    std::map<const char *, std::shared_ptr<MetaType>, cmp_str> m_nameToMetaType;
 
-    std::map<std::type_index, const std::type_index *> m_listElementType;   //list type, element type
+    std::map<std::type_index, std::shared_ptr<const std::type_index>> m_listElementType;   //list type, element type
+
+    std::map<std::type_index, std::shared_ptr<const std::type_index>> m_mapElementType;
+    std::map<std::type_index, std::shared_ptr<const std::type_index>> m_mapKeyType;
 
     void createMetaIfNoExist(std::type_index _typeIndex, int _typeSize, const char *_typeName)
     {
         auto it = m_typeToMetaType.find(_typeIndex);
         if(it == m_typeToMetaType.end())
         {
-            MetaType *metaType = new MetaType(_typeSize);
+            std::shared_ptr<MetaType> metaType(new MetaType(_typeSize));
 
             m_metaTypeList.push_back(metaType);
 
@@ -135,7 +128,20 @@ static struct MetaFactoryData
         auto it = m_typeToMetaType.find(_typeIndex);
         if(it == m_typeToMetaType.end()) return 0;
 
-        return it->second;
+        return it->second.get();
+    }
+
+    void clearAll()
+    {
+        this->m_indexList.clear();
+        this->m_listElementType.clear();
+        this->m_mapElementType.clear();
+        this->m_mapKeyType.clear();
+        this->m_metaTypeList.clear();
+        this->m_nameToMetaType.clear();
+        this->m_nameToTypeId.clear();
+        this->m_typeToMetaType.clear();
+        this->m_typeToName.clear();
     }
 
 } m_metaFactoryData;
@@ -205,10 +211,42 @@ std::type_index MetaType::getArrayElementType(std::type_index _index)
     return typeid(InvalidType);
 }
 
+std::type_index MetaType::getMapElementType(std::type_index _index)
+{
+    auto it = m_metaFactoryData.m_mapElementType.find(_index);
+    if(it != m_metaFactoryData.m_mapElementType.end())
+    {
+        return *it->second;
+    }
+
+    std::cerr << "MapType not registered for <" << _index.name() << ">" << std::endl;
+    return typeid(InvalidType);
+}
+
+std::type_index MetaType::getMapKeyType(std::type_index _index)
+{
+    auto it = m_metaFactoryData.m_mapKeyType.find(_index);
+    if(it != m_metaFactoryData.m_mapKeyType.end())
+    {
+        return *it->second;
+    }
+
+    std::cerr << "MapType not registered for <" << _index.name() << ">" << std::endl;
+    return typeid(InvalidType);
+}
+
 void MetaType::registerArrayType(std::type_index _listType, std::type_index _elementType)
 {
-    m_metaFactoryData.m_indexList.push_back(new std::type_index(_elementType));
+    m_metaFactoryData.m_indexList.push_back(std::make_shared<std::type_index>(_elementType));
     m_metaFactoryData.m_listElementType[_listType] = m_metaFactoryData.m_indexList.back();
+}
+
+void MetaType::registerMapType(std::type_index _mapType,
+                               std::type_index _keyType,
+                               std::type_index _elementType)
+{
+    m_metaFactoryData.m_mapElementType[_mapType] = std::make_shared<std::type_index>(_elementType);
+    m_metaFactoryData.m_mapKeyType[_mapType] = std::make_shared<std::type_index>(_keyType);
 }
 
 void MetaType::registerType(std::type_index _typeInfo, const char *_typeName, int _typeSize)
@@ -340,6 +378,11 @@ bool MetaType::invokeDestructor(std::type_index _typeIndex, void *o1)
     }
 
     return false;
+}
+
+void MetaType::unregisterAll()
+{
+    m_metaFactoryData.clearAll();
 }
 
 

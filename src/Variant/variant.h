@@ -2,15 +2,17 @@
 #define VARIANT_H
 
 #include <map>
+#include <type_traits>
 
-#ifdef _DEBUG
-#include "vld.h"
-#endif
+//#ifdef _DEBUG
+//#include "vld.h"
+//#endif
 
 #include "../export.h"
 #include "variantholder.h"
 #include "variantconverter.h"
 #include "variantoutput.h"
+#include "../converters.h"
 #include "../MetaType/metatype.h"
 
 #  pragma warning( push )
@@ -30,6 +32,7 @@ public:
     Variant(double v);
     Variant(const std::string &v);
     Variant(const Variant &v);
+    Variant(const char *_v);
     void setValue(const Variant& v);
     void operator=(const Variant& v);
 
@@ -200,6 +203,10 @@ void registerVariantTypeCreator()
     variantCreatorMap()[typeid(Type)] = variantTypeCreator<Type>;
 }
 
+void PROPERTY_SYSTEM_EXPORT unregisterVariant();
+
+
+
 //~variant creator scope
 
 //variant converter scope
@@ -234,9 +241,33 @@ void registerVariantInternalTypeConverter()
 template<class Type>
 struct MetaTypeRegistrator
 {
+    template<class Type>
+    static void registerArrayType(const std::vector<Type> &)
+    {
+        MetaType::registerArrayType<std::vector<Type>>();
+        ConverterRegistrator::registerToVectorConverter<Type>();
+    }
+
+    template<class Type>
+    static void registerArrayType(const Type &) {}
+
+
+    template<class KeyType, class ValueType>
+    static void registerMapType(const std::map<KeyType, ValueType> &)
+    {
+        MetaType::registerMapType<std::map<KeyType, ValueType>>();
+        ConverterRegistrator::registerToMapConverter<KeyType, Type>();
+    }
+
+    template<class Type>
+    static void registerMapType(const Type &) {}
+
+
     MetaTypeRegistrator(const char *_value)
     {
         MetaType::registerType<Type>(_value);
+        MetaTypeRegistrator::registerArrayType(Type());
+        MetaTypeRegistrator::registerMapType(Type());
         MetaType::registerDestructor<Type>();
         registerVariantTypeCreator<Type>();
     }

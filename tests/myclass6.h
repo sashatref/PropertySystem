@@ -9,6 +9,13 @@ class MyClass6 : public IProperty
 {
     I_PROPERTY
 public:
+
+    enum SomeEnum
+    {
+        Value1 = 0,
+        Value2
+    };
+
     MyClass6 &random();
     MyClass6(int _value = 0);
     ~MyClass6() { /*qDebug() << "~Myclass" << m_field1;*/ }
@@ -27,6 +34,7 @@ public:
     QPointF m_pointFField;
     QSize m_size;
     Simple m_simple;
+    SomeEnum somEnum;
 };
 
 Q_DECLARE_METATYPE(MyClass6)

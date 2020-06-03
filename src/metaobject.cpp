@@ -34,6 +34,12 @@ namespace PropertySystemNS
 
         std::shared_ptr<const MetaProperty> sharedPtr;
         sharedPtr.reset(_prop);
+
+        if(d->propMap.find(_prop->name()) != d->propMap.end())
+        {
+            std::cerr << "Property <" << _prop->name() << "> already exist!";
+        }
+
         d->propMap[_prop->name()] = sharedPtr;
         return this;
     }
@@ -49,7 +55,7 @@ namespace PropertySystemNS
         return 0;
     }
 
-    std::vector<const MetaProperty *> MetaObject::properties() const
+    const std::vector<const MetaProperty *> &MetaObject::properties() const
     {
         return d->propList;
     }

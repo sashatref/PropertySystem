@@ -63,24 +63,12 @@ MetaFiles.files +=          MetaType/metatype.h              \
 
 MetaFiles.path =            $${INSTALL_DIR}/include/PropertySystem/MetaType
 
-JuceFiles.files +=          Juce/*
-JuceFiles.path  =           $${INSTALL_DIR}/include/PropertySystem/Juce
-
-JuceLibFiles.files +=       $${DESTDIR}/$${TARGET}.lib
-JuceLibFiles.path  =        D:\my_projects\TSInstructor\3rd_party\lib
-
-JuceDllFiles.files +=       $${DESTDIR}/$${TARGET}.dll
-JuceDllFiles.path  =        D:\my_projects\TSInstructor\3rd_party\bin
-
 
 INSTALLS += priFile             \
             binFiles            \
             prop                \
             MetaFiles           \
-            Variant             \
-            JuceFiles           \
-            JuceLibFiles        \
-            JuceDllFiles
+            Variant
 
 HEADERS += \
     buildNumber.h \
@@ -102,8 +90,7 @@ HEADERS += \
     MetaType/metatypedestructorbase.h \
     MetaType/metatypeequalsbase.h \
     MetaType/metatypeoutputbase.h \
-    Variant/basetypeconverters.h \
-    Juce/VariantJuceSupportInit.h
+    Variant/basetypeconverters.h
 
 SOURCES += \
     iproperty.cpp \

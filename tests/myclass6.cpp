@@ -1,5 +1,6 @@
 #include "project_pch.h"
 #include "myclass6.h"
+#include "utils.h"
 
 //#define MOVE_COPY
 
@@ -13,6 +14,7 @@ METAPROPERTY_MEMBER(QPoint, "m_pointField", MyClass6, &MyClass6::m_pointField)
 METAPROPERTY_MEMBER(QPointF, "m_pointFField", MyClass6, &MyClass6::m_pointFField)
 METAPROPERTY_MEMBER(QSize, "size", MyClass6, &MyClass6::m_size)
 METAPROPERTY_MEMBER(Simple, "simple", MyClass6, &MyClass6::m_simple)
+METAPROPERTY_MEMBER(SomeEnum, "somEnum", MyClass6, &MyClass6::somEnum)
 METAOBJECT_END
 
 PS_DECLARE_METATYPE(MyClass6)
@@ -26,6 +28,7 @@ MyClass6::MyClass6(int _value)
     m_field2 = "hello";
     m_field3 = 5.6;
     m_field4 = false;
+    somEnum = Value1;
 }
 
 MyClass6 &MyClass6::random()
@@ -35,7 +38,7 @@ MyClass6 &MyClass6::random()
     m_field3 = rand()%100;
     m_field4 = rand()%2;
     m_pointField = QPoint(rand() % 10, rand() % 10);
-    m_pointFField = QPointF(Numerics::getRandomeDouble(), Numerics::getRandomeDouble());
+    m_pointFField = QPointF(Numerics::getRandomDouble(), Numerics::getRandomDouble());
     m_size = QSize(rand() % 20, rand() % 20);
     m_simple.random();
     return *this;
@@ -68,7 +71,12 @@ bool MyClass6::operator <(const MyClass6 &_other) const
 
 QList<MyClass6> toMyClassList(const QVariantList &input)
 {
-    return Helper::fromVariantList<MyClass6>(input);
+    QList<MyClass6> out;
+    for(auto &it : input)
+    {
+        out << it.value<MyClass6>();
+    }
+    return out;
 }
 
 QList<Simple> toSimpleList (const QVariantList &list)

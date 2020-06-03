@@ -11,6 +11,21 @@
 
 using namespace PropertySystemNS;
 
+PS_DECLARE_METATYPE(MyClass6::SomeEnum)
+
+PS_DECLARE_METATYPE(std::vector<int>)
+PS_DECLARE_METATYPE(std::vector<MyClass>)
+
+static const PropertySystemNS::MetaTypeRegistrator<std::map<std::string, int>>
+    name_1("std::map<std::string, int>");
+
+//#define PS_METASYSTEM(...)
+
+
+//void Function(std::map<__VA_ARGS__>&x)
+
+//PS_METASYSTEM(int, std::string);
+
 MyClass5 MyClass4ToMyClass5(const MyClass4 &_in)
 {
     MyClass5 out;
@@ -28,21 +43,11 @@ Test_PSValid::Test_PSValid(QObject *parent):
 
     registerVariantTypeConverter<MyClass4, MyClass5>(MyClass4ToMyClass5);
 
-    MetaType::registerArrayType<std::vector<int>>();
-    MetaType::registerArrayType<std::vector<MyClass>>();
 
-    std::type_index index = MetaType::getArrayElementType<std::vector<int>>();
-
-    qDebug() << (index == typeid(InvalidType));
-
-    qDebug() << MetaType::typeName(MetaType::getArrayElementType<std::vector<MyClass>>());
 }
 
 void Test_PSValid::variantTest()
 {
-
-
-
     Variant var;
     QCOMPARE(var.isEmpty(), true);
     QCOMPARE(var.isValid(), false);
@@ -89,6 +94,23 @@ void Test_PSValid::createVariantFromHashCode()
     MyClass someClass(15);
     Variant var5(typeid(MyClass), &someClass);
     QCOMPARE(var5.value<MyClass>().m_val, 15);
+}
+
+void Test_PSValid::arrayElementType()
+{
+    std::type_index index = MetaType::getArrayElementType<std::vector<int>>();
+    std::type_index index2 = MetaType::getArrayElementType<std::vector<MyClass>>();
+
+    QCOMPARE(index, std::type_index(typeid(int)));
+    QCOMPARE(index2, std::type_index(typeid(MyClass)));
+
+    std::type_index mapIndex = MetaType::getMapElementType(typeid(std::map<std::string, int>));
+    std::type_index mapKey = MetaType::getMapKeyType(typeid(std::map<std::string, int>));
+
+    qDebug() << MetaType::typeName(typeid(std::map<std::string, int>));
+
+    QCOMPARE(mapIndex, std::type_index(typeid(int)));
+    QCOMPARE(mapKey, std::type_index(typeid(std::string)));
 }
 
 void Test_PSValid::createVariantFromName()
@@ -333,4 +355,19 @@ void Test_PSValid::variantVectorTest()
     std::vector<MyClass6> res = vec.toVector<MyClass6>();
 
     QCOMPARE(myCLassTest, res);
+}
+
+void Test_PSValid::enumTest()
+{
+//    MyClass6 someObj;
+
+//    Variant val(1);
+
+//    int v = (int)val.value<MyClass6::SomeEnum>();
+
+//    QCOMPARE(v, 1);
+
+//    someObj.setProperty("somEnum", 1);
+
+//    QCOMPARE(someObj.somEnum, MyClass6::Value2);
 }

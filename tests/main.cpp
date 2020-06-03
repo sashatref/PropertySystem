@@ -9,10 +9,6 @@
 #include "time.h"
 #include <QDebug>
 
-//#ifdef _DEBUG
-//    #include "vld.h"
-//#endif
-
 #include "project_pch.h"
 
 #include "classa.h"

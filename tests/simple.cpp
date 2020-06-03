@@ -1,5 +1,6 @@
 #include "project_pch.h"
 #include "simple.h"
+#include "utils.h"
 
 METAOBJECT_START(Simple)
 METAPROPERTY_MEMBER(int, "intValue", Simple, &Simple::m_intValue)
@@ -7,6 +8,7 @@ METAPROPERTY_MEMBER(QString, "stringValue", Simple, &Simple::m_stringValue)
 METAOBJECT_END
 
 PS_DECLARE_METATYPE(Simple)
+PS_DECLARE_METATYPE(std::vector<Simple>)
 
 Simple::Simple(int val):
     m_intValue(val),

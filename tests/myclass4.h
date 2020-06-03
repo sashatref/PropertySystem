@@ -19,7 +19,7 @@ public:
         m_value = _value;
     }
 
-    const int &get_value() const
+    int get_value() const
     {
         return m_value;
     }
@@ -29,7 +29,7 @@ public:
         m_simple = _value;
     }
 
-    const Simple &get_simple() const
+    Simple get_simple() const
     {
         return m_simple;
     }

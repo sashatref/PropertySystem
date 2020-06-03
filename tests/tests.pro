@@ -1,6 +1,6 @@
 QT              += core testlib xml
 
-CONFIG += console
+CONFIG += console no_qt_ver_in_path
 CONFIG -= app_bundle
 
 TEMPLATE = app
@@ -25,7 +25,7 @@ SOURCES += main.cpp \
     classa.cpp \
     myclass5.cpp \
     myclass6.cpp \
-    3rd_party/functions.cpp
+    utils.cpp
 
 HEADERS += \
     test_propertysystem.h \
@@ -40,4 +40,4 @@ HEADERS += \
     classa.h \
     myclass5.h \
     myclass6.h \
-    3rd_party/functions.h
+    utils.h

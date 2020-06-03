@@ -25,6 +25,9 @@ class MetaTypeDestructorBase;
 class PROPERTY_SYSTEM_EXPORT MetaType
 {
     static void registerArrayType(std::type_index _listType, std::type_index _elementType);
+    static void registerMapType(std::type_index _mapType,
+                                std::type_index _keyType,
+                                std::type_index _elementType);
 public:
     MetaType(unsigned int _sizeOf);
 
@@ -55,6 +58,12 @@ public:
         registerArrayType(typeid(T), typeid(T::value_type));
     }
 
+    template<class T>
+    static void registerMapType()
+    {
+        registerMapType(typeid(T), typeid(T::key_type), typeid(T::mapped_type));
+    }
+
     template<class Type>
     static std::type_index getArrayElementType()
     {
@@ -62,6 +71,8 @@ public:
     }
 
     static std::type_index getArrayElementType(std::type_index _index);
+    static std::type_index getMapElementType(std::type_index _index);
+    static std::type_index getMapKeyType(std::type_index _index);
 
     template<class Type>
     static void registerType(const char *_typeName)
@@ -107,6 +118,8 @@ public:
     static bool invokeEqualsOperator(std::type_index _typeIndex, const void *o1, const void *o2);
     static bool invokeOutputOperator(std::type_index _typeIndex, std::ostream &ss, const void *o1);
     static bool invokeDestructor(std::type_index _typeIndex, void *o1);
+
+    static void unregisterAll();
 
 public:
     unsigned int m_sizeOf;

@@ -23,7 +23,7 @@ public:
 
     const MetaProperty *property(const char *_propertyName) const;
 
-    std::vector<const MetaProperty*> properties() const;
+    const std::vector<const MetaProperty*> &properties() const;
 
 private:
     PS_DISABLE_COPY(MetaObject);

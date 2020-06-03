@@ -11,11 +11,6 @@ class MyClass3 : public QObject
     Q_PROPERTY(int value READ getValue WRITE setValue)
     Q_PROPERTY(Simple simple READ getSimple WRITE setSimple)
 public:
-    MyClass3()
-    {
-
-    }
-
     void setValue(int _value)
     {
         m_value = _value;
@@ -26,7 +21,7 @@ public:
         return m_value;
     }
 
-    void setSimple(const Simple _value)
+    void setSimple(const Simple &_value)
     {
         m_simple = _value;
     }

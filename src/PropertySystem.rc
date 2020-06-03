@@ -12,11 +12,11 @@ BEGIN
 	BEGIN
 		BLOCK "040904b0"
 		BEGIN
-			VALUE "FileDescription", "HelperLibrary"
+			VALUE "FileDescription", "PropertySystem"
 			VALUE "LegalCopyright", "Avia"
-			VALUE "OriginalFilename", "HelperLibrary.dll"
-			VALUE "ProductName", "HelperLibrary"
-			VALUE "ProductVersion", PRODUCT_VER
+			VALUE "OriginalFilename", "PropertySystem.dll"
+			VALUE "ProductName", "PropertySystem"
+			VALUE "ProductVersion", GIT_HASH
 		END
 	END
 	BLOCK "VarFileInfo"

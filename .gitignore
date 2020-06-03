@@ -1,4 +1,5 @@
 /Builds*
+/Build-*
 /include
 /bin
 /translations

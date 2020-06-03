@@ -31,29 +31,17 @@ namespace FuncInvokers
 
 
 
+#define PS_CONCAT_(x,y) x##y
 
+#define PS_CONCAT_COMA(x,y) x##,y
 
+#define PS_CONCAT(x,y) PS_CONCAT_(x,y)
 
-#ifndef PS_CONCAT_
-    #define PS_CONCAT_(x,y) x##y
-#endif
+#define PS_STRINGIZE(x) PS_STRINGIZE2(x)
 
-#ifndef PS_CONCAT
-    #define PS_CONCAT(x,y) PS_CONCAT_(x,y)
-#endif
+#define PS_STRINGIZE2(x) #x
 
-#ifndef PS_STRINGIZE
-    #define PS_STRINGIZE(x) PS_STRINGIZE2(x)
-#endif
-
-#ifndef PS_STRINGIZE2
-    #define PS_STRINGIZE2(x) #x
-#endif
-
-
-#ifndef PS_UNIQUE_NAME2
-    #define PS_UNIQUE_NAME2(base) PS_CONCAT(base, __COUNTER__)
-#endif
+#define PS_UNIQUE_NAME2(base) PS_CONCAT(base, __COUNTER__)
 
 
 #ifndef PS_REGISTER_CONSTRUCTOR_FUNC
@@ -75,13 +63,19 @@ namespace FuncInvokers
 #endif
 
 
-#ifndef PS_DECLARE_METATYPE
-    #define PS_DECLARE_METATYPE(ClassName)                                  \
-    namespace                                                               \
-    {                                                                       \
-        static const PropertySystemNS::MetaTypeRegistrator<ClassName>       \
-            PS_UNIQUE_NAME2(MetaTypeRegistratorClassInstance_)(#ClassName); \
-    }
-#endif
+
+#define PS_DECLARE_METATYPE(ClassName)                                  \
+namespace                                                               \
+{                                                                       \
+    static const PropertySystemNS::MetaTypeRegistrator<ClassName>       \
+        PS_UNIQUE_NAME2(MetaTypeRegistratorClassInstance_)(#ClassName); \
+}
+
+#define PS_DECLARE_METATYPE_MAP(Part1, Part2)                           \
+namespace                                                               \
+{                                                                       \
+    static const PropertySystemNS::MetaTypeRegistrator<Part1, ##Part2>       \
+        PS_UNIQUE_NAME2(MetaTypeRegistratorClassInstance_)(PS_STRINGIZE(PS_CONCAT_COMA(Part1, Part2))); \
+}
 
 #endif // VARIANTMACRO_H

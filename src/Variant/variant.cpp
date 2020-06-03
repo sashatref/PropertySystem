@@ -63,6 +63,12 @@ static struct VariantFactoryData
 
     }
 
+    void clear()
+    {
+        this->m_variantConverterMap.clear();
+        this->m_variantCreatorMap.clear();
+    }
+
     ~VariantFactoryData()
     {
 
@@ -101,6 +107,12 @@ Variant::Variant(const std::string &v) :
 
 Variant::Variant(const Variant &v):
     holder(v.holder ? v.holder->clone() : 0)
+{
+
+}
+
+Variant::Variant(const char *_v):
+    Variant(std::string(_v))
 {
 
 }
@@ -267,6 +279,11 @@ std::ostream &operator <<(std::ostream &out, const Variant &_val)
 
     out << "Variant(Invalid, )";
     return out;
+}
+
+void unregisterVariant()
+{
+    m_variantFactoryData.clear();
 }
 
 

@@ -37,7 +37,7 @@ class MetaPropertyT : public MetaProperty
 {
 public:
     typedef void(ClassType::*Setter)(const ArgumentType&);
-    typedef const ArgumentType&(ClassType::*Getter)() const;
+    typedef ArgumentType (ClassType::*Getter)() const;
 
     MetaPropertyT(const char *_name, Setter _setter, Getter _getter):
         MetaProperty(_name),
@@ -59,6 +59,7 @@ public:
         if(!p)
         {
             printf("Can't cast <const IProperty*> to <const %s*>\n", typeid(ClassType).name());
+            return Variant();
         }
         return Variant::fromValue((*p.*m_getter)());
     }
@@ -74,6 +75,7 @@ public:
         if(!p)
         {
             printf("Can't cast <IProperty*> to <%s*>\n", typeid(ClassType).name());
+            return;
         }
         (*p.*m_setter)(_value.value<ArgumentType>());
     }
@@ -115,6 +117,7 @@ public:
         if(!p)
         {
             printf("Can't cast <const IProperty*> to <const %s*>\n", typeid(ClassType).name());
+            return Variant();
         }
         return Variant::fromValue(*p.*m_member);
     }
@@ -130,6 +133,7 @@ public:
         if(!p)
         {
             printf("Can't cast <IProperty*> to <%s*>\n", typeid(ClassType).name());
+            return;
         }
         (*p).*m_member = _value.value<ArgumentType>();
     }

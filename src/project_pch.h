@@ -13,6 +13,13 @@
 #include <string>
 #include <algorithm>
 #include <memory>
+#include <list>
+
+#ifdef _DEBUG
+    #ifdef USE_VLD
+        #include <vld.h>
+    #endif
+#endif
 
 struct cmp_str
 {

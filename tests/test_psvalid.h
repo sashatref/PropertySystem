@@ -13,6 +13,8 @@ private slots:
     void variantTest();
     void createVariantFromHashCode();
 
+    void arrayElementType();
+
     void createVariantFromName();
 
     void variantConvertTest();
@@ -29,6 +31,8 @@ private slots:
 
     void variantMapTest();
     void variantVectorTest();
+
+    void enumTest();
 };
 
 #endif // TEST_PSVALID_H

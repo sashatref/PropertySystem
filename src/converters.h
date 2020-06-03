@@ -6,6 +6,9 @@
 #include "Variant/variantmap.h"
 #include "Variant/variantvector.h"
 
+#pragma warning (push, 1)
+#pragma warning ( disable:4503 )
+
 namespace PropertySystemNS
 {
 
@@ -30,10 +33,12 @@ void registerToVectorConverter()
     });
 }
 
+
+
 template<class KeyType, class ValueType>
 void registerToMapConverter()
 {
-    typedef std::map<KeyType, ValueType> UserMapType;
+    using UserMapType = std::map<KeyType, ValueType>;
 
     registerVariantTypeConverter<VariantMap, UserMapType>([](const VariantMap &_inMap)
                                                                            -> UserMapType
@@ -48,11 +53,12 @@ void registerToMapConverter()
         return VariantMap().fromMap(_inMap);
     });
 }
-}
-
-
 
 
 }
+
+}
+
+#pragma warning( pop )
 
 #endif // CONVERTERS_H
